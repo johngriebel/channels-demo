@@ -14,6 +14,43 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_LOG_DIR = os.path.join(BASE_DIR, 'logs/')
+
+
+def check_and_make_dir(sub_dir):
+    full_path = os.path.join(BASE_LOG_DIR, sub_dir)
+    if not os.path.isdir(full_path):
+        os.makedirs(full_path)
+    return full_path
+
+
+handlers = {}
+loggers = {}
+
+for app in ['fantasy_sports']:
+    handler = {'level': 'DEBUG',
+               'filename': os.path.join(check_and_make_dir(app), f'{app}.log'),
+               'formatter': 'verbose',
+               'class': 'logging.handlers.TimedRotatingFileHandler',
+               'when': 'midnight',
+               'interval': 1
+               }
+    handlers[f'{app}_handler'] = handler
+    loggers.update({app: {'handlers': [f'{app}_handler'],
+                          'level': 'DEBUG'}
+                    })
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(filename)s:%(lineno)s] %(message)s",
+        }
+    },
+    'handlers': handlers,
+    'loggers': loggers
+}
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,7 +74,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
+    # 'channels',
+    'django_extensions',
     'fantasy_sports'
 ]
 

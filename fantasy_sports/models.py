@@ -51,6 +51,7 @@ class Player(ChannelsDemoBaseModel):
 class FantasyLeague(ChannelsDemoBaseModel):
     commissioner = models.ForeignKey(User, on_delete=models.CASCADE)
     num_teams = models.IntegerField()
+    name = models.CharField(max_length=100, default='')
     # Probably other stuff...
 
     class Meta:
@@ -73,3 +74,13 @@ class PlayerFantasyTeamXRef(ChannelsDemoBaseModel):
 
     class Meta:
         db_table = 'player_fantasy_team_xref'
+
+
+class DraftPick(ChannelsDemoBaseModel):
+    team = models.ForeignKey(FantasyTeam, on_delete=models.CASCADE)
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    round = models.IntegerField()
+    pick = models.IntegerField()
+
+    class Meta:
+        db_table = 'draft_pick'
