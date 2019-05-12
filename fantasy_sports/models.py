@@ -44,6 +44,9 @@ class Player(ChannelsDemoBaseModel):
     pts = models.DecimalField(max_digits=3, decimal_places=1)
     plus_minus = models.DecimalField(max_digits=3, decimal_places=1)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}: {self.nba_team_abbreviation    }'
+
     class Meta:
         db_table = 'players'
 
